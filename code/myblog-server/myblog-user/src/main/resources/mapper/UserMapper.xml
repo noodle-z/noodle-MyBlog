@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzzwb.myblog.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.zzzwb.myblog.domain.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="personal_profile" jdbcType="VARCHAR" property="personalProfile" />
+    <result column="constellation" jdbcType="CHAR" property="constellation" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="created_by" jdbcType="INTEGER" property="createdBy" />
+    <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime" />
+    <result column="last_modified_by" jdbcType="INTEGER" property="lastModifiedBy" />
+  </resultMap>
+</mapper>

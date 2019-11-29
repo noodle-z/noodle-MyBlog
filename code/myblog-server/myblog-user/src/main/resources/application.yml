@@ -1,0 +1,29 @@
+spring:
+  redis:
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+    sentinel:
+      master: mymaster
+      nodes: 192.168.177.135:26379
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/my_blog?useUnicode=true&characterEncoding=utf-8&useSSL=false&useAffectedRows=true
+      username: root
+      password: 123123
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  type-aliases-package: com.zzzwb.myblog.domain
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    cache-enabled: true
+
+

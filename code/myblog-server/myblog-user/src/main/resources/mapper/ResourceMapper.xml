@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzzwb.myblog.mapper.ResourceMapper">
+  <resultMap id="BaseResultMap" type="com.zzzwb.myblog.domain.Resource">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="class_description" jdbcType="VARCHAR" property="classDescription" />
+    <result column="action" jdbcType="VARCHAR" property="action" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="created_by" jdbcType="INTEGER" property="createdBy" />
+    <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime" />
+    <result column="last_modified_by" jdbcType="INTEGER" property="lastModifiedBy" />
+  </resultMap>
+</mapper>
