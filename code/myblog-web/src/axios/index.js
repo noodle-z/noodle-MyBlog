@@ -31,7 +31,7 @@ axios.interceptors.response.use(data=> {
   return Promise.resolve(err);
 });
 
-let base = 'http://24301t9n03.zicp.vip:15135';
+let base = 'http://localhost:8080';
 
 export const postRequest = (url, params) => {
   return axios({

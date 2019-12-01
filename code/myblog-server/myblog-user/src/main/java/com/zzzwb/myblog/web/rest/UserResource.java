@@ -1,9 +1,12 @@
 package com.zzzwb.myblog.web.rest;
 
 import com.zzzwb.myblog.annotation.Access;
+import com.zzzwb.myblog.bean.SearchBean;
 import com.zzzwb.myblog.constant.Action;
 import com.zzzwb.myblog.domain.User;
+import com.zzzwb.myblog.domain.UserRole;
 import com.zzzwb.myblog.function.OnlineUserFunction;
+import com.zzzwb.myblog.service.UserRoleService;
 import com.zzzwb.myblog.service.UserService;
 import com.zzzwb.myblog.web.dto.BaseDto;
 import com.zzzwb.myblog.web.vo.AddRoleVo;
@@ -33,11 +36,16 @@ public class UserResource extends BaseResource<User> {
 	 * 用户事务层
 	 */
 	private UserService userService;
+	/**
+	 * 用户角色事务层
+	 */
+	private UserRoleService userRoleService;
 
 
-	public UserResource(UserService userService) {
+	public UserResource(UserService userService, UserRoleService userRoleService) {
 		super(userService);
 		this.userService = userService;
+		this.userRoleService = userRoleService;
 	}
 
 	@PutMapping("/login")
@@ -53,6 +61,11 @@ public class UserResource extends BaseResource<User> {
 			if (user.getPassword().equals(voPassword)) {
 				//生成token
 				String token = Md5Crypt.md5Crypt(UUID.randomUUID().toString().getBytes());
+				//查出用户的角色并将用用户存储进redis在线用户列表中
+				SearchBean searchBean = new SearchBean("userId", user.getId());
+				List<UserRole> userRoles = userRoleService.queryBySearch(searchBean);
+				//给用户的roles字段赋值
+				setRolesToUser(user, userRoles);
 				token = "myBlog-" + token;
 				//存储用户在线信息
 				OnlineUserFunction.addOnlineUser(token, user);
@@ -91,5 +104,19 @@ public class UserResource extends BaseResource<User> {
 		String token = request.getHeader("token");
 		OnlineUserFunction.removeUserByToken(token);
 		return ResponseEntity.ok().build();
+	}
+
+	/**
+	 * 想用户对象设置roles字段
+	 *
+	 * @param user 用户
+	 * @param userRoles 用户对应的角色集合
+	 */
+	private void setRolesToUser(User user, List<UserRole> userRoles){
+		StringBuilder builder = new StringBuilder();
+		for (UserRole userRole : userRoles) {
+			builder.append(userRole.getRoleId() + ",");
+		}
+		user.setRoles(builder.substring(0, builder.length()-1));
 	}
 }

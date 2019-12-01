@@ -1,6 +1,7 @@
 package com.zzzwb.myblog.bootstrap;
 
 import com.zzzwb.myblog.annotation.Access;
+import com.zzzwb.myblog.constant.RedisConstant;
 import com.zzzwb.myblog.domain.Resource;
 import com.zzzwb.myblog.domain.RoleResource;
 import com.zzzwb.myblog.service.ResourceService;
@@ -147,14 +148,36 @@ public class AccessRegistry implements ApplicationRunner {
 				}
 			});
 			//处理数据
-			this.updateResource(exist, scan);
+			updateResource(exist, scan);
+			//先redis中存储权限资源数据
+			saveDatasToRedis();
 			logger.info("-------------------- 权限资源更新结束 ----------------------");
-			List<Resource> resources = this.resourceService.findAll();
-			Map<String, List<Resource>> resourceMap =
-					resources.stream().collect(Collectors.groupingBy(resource -> resource.getPath().split("/")[2]));
-			RedisUtil.hmset("accessResources", resourceMap);
 		}
+	}
 
+	/**
+	 * 将所有接口资源数据与角色对应的接口资源数据存储进数据库
+	 */
+	private void saveDatasToRedis() {
+		List<Resource> resources = resourceService.findAll();
+		//根据path的关键字进行接口资源的分组存储
+		Map<String, List<Resource>> resourceMap =
+				resources.stream().collect(Collectors.groupingBy(resource -> resource.getPath().split("/")[2]));
+		RedisUtil.hmset(RedisConstant.ACCESS_RESOURCES, resourceMap);
+
+		//根据角色进行接口资源的分组存储
+		List<RoleResource> roleResources = this.roleResouceService.findAll();
+		Map<String, List<Resource>> roleResourceMap = new HashMap<>(64);
+		roleResources.forEach(roleResource -> {
+			roleResourceMap.putIfAbsent(roleResource.getRoleId().toString(), new ArrayList<>(128));
+			List<Resource> resourcesOfRole = roleResourceMap.get(roleResource.getRoleId().toString());
+			resources.forEach(resource -> {
+				if (resource.getId().equals(roleResource.getResourceId())) {
+					resourcesOfRole.add(resource);
+				}
+			});
+		});
+		RedisUtil.hmset(RedisConstant.RESOURCE_OF_ROLE, roleResourceMap);
 	}
 
 	/**

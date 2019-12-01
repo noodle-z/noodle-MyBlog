@@ -16,4 +16,14 @@ public class RedisConstant {
 	 * 在线用户前缀
 	 */
 	public final static String ONLINE_USER = "onlineUser-";
+
+	/**
+	 * 角色接口资源map
+	 */
+	public final static String RESOURCE_OF_ROLE = "resourceOfRole";
+
+	/**
+	 * 权限资源
+	 */
+	public final static String ACCESS_RESOURCES = "accessResources";
 }

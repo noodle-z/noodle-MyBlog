@@ -133,7 +133,7 @@
   .form-login {
     background-color: aliceblue;
     width: 21%;
-    min-width: 340px;
+    min-width: 300px;
     margin: 0 auto;
     border: 1px solid #DCDFE6;
     padding: 20px;
